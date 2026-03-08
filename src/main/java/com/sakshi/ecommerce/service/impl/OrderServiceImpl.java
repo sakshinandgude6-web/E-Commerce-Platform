@@ -24,9 +24,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void checkout(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found!"));
 
-        Cart cart = cartRepository.findByUser(user).orElseThrow(() -> new RuntimeException("Cart not found!"));
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+
+        Cart cart = cartRepository.findByUser(user)
+                .orElseThrow(() -> new RuntimeException("Cart not found!"));
 
         List<CartItem> cartItems = cart.getItems();
 
@@ -34,24 +37,30 @@ public class OrderServiceImpl implements OrderService {
             throw new RuntimeException("Cart is empty");
         }
 
-        Order order = Order.builder().user(user).status("CREATED").build();
-
-        orderRepository.save(order);
+        Order order = Order.builder()
+                .user(user)
+                .status("CREATED")
+                .build();
 
         List<OrderItem> orderItems = new ArrayList<>();
-
         BigDecimal total = BigDecimal.ZERO;
 
         for (CartItem cartItem : cartItems) {
+
             Product product = productRepository.findById(
-                    cartItem.getProduct().getId()).orElseThrow(() -> new RuntimeException("Product not found"));
+                    cartItem.getProduct().getId())
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
+
+            System.out.println("Product ID: " + product.getId());
+            System.out.println("Product Stock: " + product.getStock());
+            System.out.println("Cart Quantity: " + cartItem.getQuantity());
 
             if (product.getStock() < cartItem.getQuantity()) {
-                throw new RuntimeException("Product out of Stock!");
+                throw new RuntimeException("Product out of stock");
             }
 
+            // reduce stock
             product.setStock(product.getStock() - cartItem.getQuantity());
-            productRepository.save(product);
 
             OrderItem orderItem = OrderItem.builder()
                     .order(order)
@@ -60,18 +69,21 @@ public class OrderServiceImpl implements OrderService {
                     .price(cartItem.getPrice())
                     .build();
 
+            orderItems.add(orderItem);
+
             total = total.add(
                     cartItem.getPrice()
                             .multiply(BigDecimal.valueOf(cartItem.getQuantity())));
-
-            orderItems.add(orderItem);
         }
 
         order.setItems(orderItems);
         order.setTotalPrice(total);
 
-        cartItemRepository.deleteAll(cartItems);
+        orderRepository.save(order);
 
+        // clear cart
+        cart.getItems().clear();
+        cartRepository.save(cart);
     }
 
 }

@@ -11,35 +11,46 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
 
-    private final CartRepository cartRepository;
-    private final CartItemRepository cartItemRepository;
-    private final ProductRepository productRepository;
-    private final UserRepository userRepository;
+        private final CartRepository cartRepository;
+        private final CartItemRepository cartItemRepository;
+        private final ProductRepository productRepository;
+        private final UserRepository userRepository;
 
-    @Override
-    public void addToCart(String email, AddToCartRequest request) {
+        @Override
+        public void addToCart(String email, AddToCartRequest request) {
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                User user = userRepository.findByEmail(email)
+                                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Cart cart = cartRepository.findByUser(user)
-                .orElseGet(() -> {
-                    Cart newCart = Cart.builder()
-                            .user(user)
-                            .build();
-                    return cartRepository.save(newCart);
-                });
+                Cart cart = cartRepository.findByUser(user).orElse(null);
 
-        Product product = productRepository.findById(request.getProductId())
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                if (cart == null) {
+                        cart = new Cart();
+                        cart.setUser(user);
+                        cart = cartRepository.save(cart);
+                }
 
-        CartItem item = CartItem.builder()
-                .cart(cart)
-                .product(product)
-                .quantity(request.getQuantity())
-                .price(product.getPrice())
-                .build();
+                Product product = productRepository.findById(request.getProductId())
+                                .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        cartItemRepository.save(item);
-    }
+                // Check if product already exists in cart
+                CartItem existingItem = cartItemRepository
+                                .findByCartAndProduct(cart, product)
+                                .orElse(null);
+
+                if (existingItem != null) {
+                        // Update quantity
+                        existingItem.setQuantity(existingItem.getQuantity() + request.getQuantity());
+                        cartItemRepository.save(existingItem);
+                } else {
+                        CartItem item = CartItem.builder()
+                                        .cart(cart)
+                                        .product(product)
+                                        .quantity(request.getQuantity())
+                                        .price(product.getPrice())
+                                        .build();
+
+                        cartItemRepository.save(item);
+                }
+        }
 }

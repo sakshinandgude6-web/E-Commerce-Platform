@@ -18,16 +18,33 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse createProduct(ProductRequest request) {
-        Product product = Product.builder()
-                .name(request.getName())
-                .description(request.getDescription())
-                .price(request.getPrice())
-                .stock(request.getStock())
-                .build();
 
-        Product savedProduct = productRepository.save(product);
+        Product product = productRepository.findByName(request.getName())
+                .orElse(null);
 
-        return mapToResponse(savedProduct);
+        if (product != null) {
+
+            // Product already exists → increase stock
+            product.setStock(product.getStock() + request.getStock());
+
+            Product updatedProduct = productRepository.save(product);
+
+            return mapToResponse(updatedProduct);
+
+        } else {
+
+            // Create new product
+            Product newProduct = Product.builder()
+                    .name(request.getName())
+                    .description(request.getDescription())
+                    .price(request.getPrice())
+                    .stock(request.getStock())
+                    .build();
+
+            Product savedProduct = productRepository.save(newProduct);
+
+            return mapToResponse(savedProduct);
+        }
     }
 
     @Override
