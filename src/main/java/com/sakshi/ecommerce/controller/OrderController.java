@@ -1,7 +1,11 @@
 package com.sakshi.ecommerce.controller;
 
+import com.sakshi.ecommerce.entity.Order;
 import com.sakshi.ecommerce.service.OrderService;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,5 +24,13 @@ public class OrderController {
         orderService.checkout(email);
 
         return "Order placed successfully";
+    }
+
+    @GetMapping
+    public List<Order> getMyOrders(Authentication authentication) {
+
+        String email = authentication.getName();
+
+        return orderService.getUserOrders(email);
     }
 }

@@ -6,7 +6,7 @@ import com.sakshi.ecommerce.service.OrderService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import com.sakshi.ecommerce.service.OrderService;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.ArrayList;
@@ -85,4 +85,12 @@ public class OrderServiceImpl implements OrderService {
                 cartRepository.save(cart);
         }
 
+        @Override
+        public List<Order> getUserOrders(String email) {
+
+                User user = userRepository.findByEmail(email)
+                                .orElseThrow(() -> new RuntimeException("User not found"));
+
+                return orderRepository.findByUser(user);
+        }
 }
