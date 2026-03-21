@@ -1,260 +1,113 @@
-# E-Commerce Backend System
-
-A production-style RESTful E-Commerce Backend built using Java, Spring Boot, PostgreSQL, JWT Authentication, and Role-Based Access Control (RBAC).
-This project simulates a real-world backend system for an online shopping platform.
-
-## Overview
-
-This project focuses on:
-
-Secure authentication and authorization
-
-Scalable layered architecture
-
-Structured relational database design
-
-REST API development
-
-Deployment-ready backend services
-
-## Features
-Authentication and Security
-
-User registration and login
-
-JWT-based authentication
-
-Role-Based Access Control (RBAC)
-
-Password encryption using Spring Security
-
-User Management
-
-Register new users
-
-Login existing users
-
-View user profile
-
-Manage user roles
-
-Product Management
-
-Add products
-
-Update product details
-
-Delete products
-
-View and search products
-
-Cart Management
-
-Add items to cart
-
-Update cart quantity
-
-Remove items from cart
-
-View cart
-
-Order Management
-
-Place orders
-
-View order history
-
-Manage order status
-
-## Tech Stack
-Backend
-
-Java
-
-Spring Boot
-
-Spring Web
-
-Spring Data JPA
-
-Spring Security
-
-Security
-
-JWT
-
-BCrypt
-
-Role-Based Access Control
-
-Database
-
-PostgreSQL
-
-Tools
-
-Maven
-
-Postman
-
-Deployment
-
-AWS EC2
-
-AWS RDS
-
-## Project Structure
-src
-├── controller
-├── service
-├── repository
-├── entity
-├── dto
-├── config
-├── security
-└── exception
-
-## Architecture Layers
-
-Controller Layer – Handles API requests
-
-Service Layer – Contains business logic
-
-Repository Layer – Interacts with database
-
-Security Layer – Handles authentication and authorization
-
-## Database Design
-Main Entities
-
-User
-
-Role
-
-Product
-
-Cart
-
-Order
-
-OrderItem
-
-## API Endpoints
-Authentication
-
-POST /auth/register
-
-POST /auth/login
-
-Users
-
-GET /users/profile
-
-GET /users
-
-Products
-
-GET /products
-
-GET /products/{id}
-
-POST /products
-
-PUT /products/{id}
-
-DELETE /products/{id}
-
-Cart
-
-GET /cart
-
-POST /cart/add
-
-PUT /cart/update
-
-DELETE /cart/remove/{id}
-
-Orders
-
-POST /orders
-
-GET /orders
-
-GET /orders/{id}
-
-## Setup Instructions
-Prerequisites
-
-Java 17+
-
-Maven
-
-PostgreSQL
-
-Git
-
-Clone Repository
-
+#  E-Commerce Backend Platform
+
+A production-style RESTful E-Commerce Backend built with **Java**, **Spring Boot**, **PostgreSQL**, **JWT Authentication**, and **Role-Based Access Control (RBAC)**. This project simulates a real-world backend system for an online shopping platform.
+
+##  Live / Deployment
+- Backend deployed on **AWS EC2 + AWS RDS**
+
+##  Tech Stack
+
+| Layer | Technologies |
+|-------|-------------|
+| Backend | Java 17, Spring Boot, Spring Web, Spring Data JPA, Spring Security |
+| Security | JWT, BCrypt, RBAC |
+| Database | PostgreSQL |
+| Tools | Maven, Postman |
+| Deployment | AWS EC2, AWS RDS |
+
+##  Features
+
+###  Authentication & Security
+- User registration and login
+- JWT-based authentication with expiry
+- Role-Based Access Control (RBAC) — Admin / User
+- Password encryption using BCrypt
+
+###  User Management
+- Register / Login
+- View and manage user profiles
+- Role assignment
+
+###  Product Management
+- Add, update, delete products
+- View and search products
+
+###  Cart Management
+- Add/remove items, update quantities
+- View cart contents
+
+###  Order Management
+- Place orders, view order history
+- Manage order status
+
+##  Project Structure
+src/
+├── controller/     → Handles API requests
+├── service/        → Business logic
+├── repository/     → Database interaction (JPA)
+├── entity/         → JPA entities
+├── dto/            → Data Transfer Objects
+├── config/         → App configuration
+├── security/       → JWT & Auth filters
+└── exception/      → Custom error handling
+
+##  API Endpoints
+
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | `/auth/register` | Register user | Public |
+| POST | `/auth/login` | Login user | Public |
+| GET | `/users/profile` | Get profile | Protected |
+| GET | `/products` | List products | Public |
+| POST | `/products` | Create product | Admin |
+| PUT | `/products/{id}` | Update product | Admin |
+| DELETE | `/products/{id}` | Delete product | Admin |
+| GET | `/cart` | View cart | Protected |
+| POST | `/cart/add` | Add to cart | Protected |
+| POST | `/orders` | Place order | Protected |
+| GET | `/orders` | View orders | Protected |
+
+##  Setup Instructions
+
+### Prerequisites
+- Java 17+, Maven, PostgreSQL, Git
+
+### Clone & Configure
+```bash
 git clone https://github.com/sakshi-nandgude/E-Commerce-Platform
+cd E-Commerce-Platform
+```
 
-Configure Database
-
+Create and configure the database:
+```sql
 CREATE DATABASE ecommerce_db;
+```
 
-Update application.properties:
-
+Update `src/main/resources/application.properties`:
+```properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/ecommerce_db
-
 spring.datasource.username=your_username
-
 spring.datasource.password=your_password
-
 spring.jpa.hibernate.ddl-auto=update
-
-Configure JWT
-
 jwt.secret=your_secret_key
-
 jwt.expiration=86400000
+```
 
-
-Build Project
-
+### Build & Run
+```bash
 mvn clean install
-
-Run Application
-
 mvn spring-boot:run
+# App runs at: http://localhost:8080
+```
 
-Application runs on:
+##  Future Improvements
+- [ ] Payment gateway integration (Stripe/PayPal)
+- [ ] Email notifications
+- [ ] Product reviews & ratings
+- [ ] Docker support
+- [ ] CI/CD pipeline with GitHub Actions
+- [ ] Swagger/OpenAPI documentation
+- [ ] Redis caching
 
-http://localhost:8080
-
-## Security
-
-JWT authentication
-
-Password hashing with BCrypt
-
-Role-based authorization
-
-Protected endpoints
-
-## Future Improvements
-
-Payment gateway integration
-
-Email notifications
-
-Product reviews
-
-Docker support
-
-CI/CD pipeline
-
-Swagger documentation
-
-## Author
-
-Sakshi Nandgude
-MSc Business Analytics, University of Limerick
+##  Author
+**Sakshi Vijay Nandgude** — MSc Business Analytics, University of Limerick
