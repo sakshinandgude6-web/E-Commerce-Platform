@@ -1,3 +1,11 @@
+![Java](https://img.shields.io/badge/Java-17-ED8B00?style=flat&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-6DB33F?style=flat&logo=springboot&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-Auth-000000?style=flat&logo=jsonwebtokens&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-EC2%20%7C%20RDS-FF9900?style=flat&logo=amazonaws&logoColor=white)
+![Maven](https://img.shields.io/badge/Maven-C71A36?style=flat&logo=apachemaven&logoColor=white)
+![License](https://img.shields.io/badge/License-Apache%202.0-blue?style=flat)
+
 #  E-Commerce Backend Platform
 
 A production-style RESTful E-Commerce Backend built with **Java**, **Spring Boot**, **PostgreSQL**, **JWT Authentication**, and **Role-Based Access Control (RBAC)**. This project simulates a real-world backend system for an online shopping platform.
