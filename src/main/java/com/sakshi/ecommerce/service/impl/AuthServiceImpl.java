@@ -30,7 +30,7 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Email already in use");
         }
 
-        Role userRole = roleRepository.findByName("USER")
+        Role userRole = roleRepository.findByNameIgnoreCase("USER")
                 .orElseThrow(() -> new RuntimeException("USER role not found"));
 
         User user = User.builder()
@@ -40,6 +40,8 @@ public class AuthServiceImpl implements AuthService {
                 .role(userRole)
                 .enabled(true)
                 .build();
+
+        System.out.println(roleRepository.findAll());
 
         userRepository.save(user);
     }
